@@ -19,8 +19,8 @@ jobs:
         dotnet-version: 6.0.x
     - name: Decrypt Keystore File
       run: |
-        echo "${{ KEYSTORE }}" > myapp.keystore.asc
-        gpg -d --passphrase "${{ KEYSTORE_PASS }}" --batch myapp.keystore.asc > myapp.keystore 
+        echo "${{ secrets.KEYSTORE }}" > myapp.keystore.asc
+        gpg -d --passphrase "${{ secrets.KEYSTORE_PASS }}" --batch myapp.keystore.asc > myapp.keystore 
     - name: Install MAUI workload
       run: dotnet workload install maui
     - name: Build
