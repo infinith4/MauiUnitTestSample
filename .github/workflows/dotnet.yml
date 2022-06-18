@@ -9,7 +9,7 @@ on:
 jobs:
   build:
 
-    runs-on: windows-latest
+    runs-on: macos-latest
 
     steps:
     - uses: actions/checkout@v3
@@ -17,10 +17,6 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: 6.0.x
-    - name: Decrypt Keystore File
-      run: |
-        echo "${{ secrets.KEYSTORE }}" > myapp.keystore.asc
-        gpg -d --passphrase "${{ secrets.KEYSTORE_PASS }}" --batch myapp.keystore.asc > myapp.keystore 
     - name: Install MAUI workload
       run: dotnet workload install maui
     - name: Build
