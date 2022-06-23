@@ -22,9 +22,9 @@ jobs:
     - name: Decrypt PFX File
       run: |
         echo "${{ secrets.WINDOWS_PFX_FILE }}" > cert.pfx.asc
-        gpg -d --passphrase "${{ secrets.WINDOWS_PFX_DECRYPT_PASSWORD }}" --batch cert.pfx.asc > $env:RUNNER_TEMP\cert.pfx
+        gpg -d --passphrase "${{ secrets.WINDOWS_PFX_DECRYPT_PASSWORD }}" --batch cert.pfx.asc > ${{ env.RUNNER_TEMP }}\cert.pfx
     - name: Build
-      run: dotnet build MauiUnitTestSample/MauiUnitTestSample.csproj -c Release -f:net6.0-windows10.0.19041.0 /p:GenerateAppxPackageOnBuild=true /p:AppxPackageSigningEnabled=true /p:PackageCertificateKeyFile="$env:RUNNER_TEMP\cert.pfx" /p:PackageCertificatePassword="${{ secrets.WINDOWS_PFX_PASSWORD }}"
+      run: dotnet build MauiUnitTestSample/MauiUnitTestSample.csproj -c Release -f:net6.0-windows10.0.19041.0 /p:GenerateAppxPackageOnBuild=true /p:AppxPackageSigningEnabled=true /p:PackageCertificateKeyFile="${{ env.RUNNER_TEMP }}\cert.pfx" /p:PackageCertificatePassword="${{ secrets.WINDOWS_PFX_PASSWORD }}"
 
     - name: Upload Build Artifacts
       uses: actions/upload-artifact@v3.1.0
