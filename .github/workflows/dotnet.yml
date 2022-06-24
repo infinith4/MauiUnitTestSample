@@ -24,10 +24,9 @@ jobs:
         echo "${{ secrets.WINDOWS_PFX_FILE }}" > cert.pfx.asc
         certutil -decode cert.pfx.asc ${{ github.workspace }}\cert.pfx
     - name: Add Cert to Store
-      uses: PowerShell@2
+      uses: Azure/powershell@v1
       with:
-        targetType: 'inline'
-        script: |
+        inlineScript: |
           Write-Host "Start adding the PFX file to the certificate store."
 
           $pfxpath = '${{ github.workspace }}\cert.pfx'
