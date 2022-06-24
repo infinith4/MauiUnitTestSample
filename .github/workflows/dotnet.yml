@@ -26,6 +26,7 @@ jobs:
     - name: Add Cert to Store
       uses: Azure/powershell@v1
       with:
+        azPSVersion: latest
         inlineScript: |
           Write-Host "Start adding the PFX file to the certificate store."
 
