@@ -23,8 +23,25 @@ jobs:
       run: |
         echo "${{ secrets.WINDOWS_PFX_FILE }}" > cert.pfx.asc
         certutil -decode cert.pfx.asc ${{ github.workspace }}\cert.pfx
+    - name: Add Cert to Store
+      uses: PowerShell@2
+      with:
+        targetType: 'inline'
+        script: |
+          Write-Host "Start adding the PFX file to the certificate store."
+
+          $pfxpath = '${{ github.workspace }}\cert.pfx'
+          $password = '${{ secrets.WINDOWS_PFX_PASSWORD }}'
+
+          Add-Type -AssemblyName System.Security
+          $cert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2
+          $cert.Import($pfxpath, $password, [System.Security.Cryptography.X509Certificates.X509KeyStorageFlags]"PersistKeySet")
+          $store = new-object system.security.cryptography.X509Certificates.X509Store -argumentlist "MY", CurrentUser
+          $store.Open([System.Security.Cryptography.X509Certificates.OpenFlags]"ReadWrite")
+          $store.Add($cert)
+          $store.Close()
     - name: Build
-      run: dotnet build MauiUnitTestSample/MauiUnitTestSample.csproj -c Release -f:net6.0-windows10.0.19041.0 /p:GenerateAppxPackageOnBuild=true /p:AppxPackageSigningEnabled=true /p:PackageCertificateKeyFile="${{ github.workspace }}\cert.pfx" /p:PackageCertificatePassword="${{ secrets.WINDOWS_PFX_PASSWORD }}"
+      run: dotnet build MauiUnitTestSample/MauiUnitTestSample.csproj -c Release -f:net6.0-windows10.0.19041.0 /p:GenerateAppxPackageOnBuild=true /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="4f1b935bca710285e039404ee423d5aec050e4b3"
 
     - name: Upload Build Artifacts
       uses: actions/upload-artifact@v3.1.0
