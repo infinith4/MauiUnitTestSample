@@ -21,7 +21,7 @@ jobs:
       run: dotnet workload install maui
     - name: Decrypt PFX File
       run: |
-        echo "${{ secrets.WINDOWS_PFX_FILE }}" > cetr.pfx.asc
+        echo "${{ secrets.WINDOWS_PFX_FILE }}" > cert.pfx.asc
         certutil -decode cert.pfx.asc > ${{ github.workspace }}\cert.pfx
     - name: Build
       run: dotnet build MauiUnitTestSample/MauiUnitTestSample.csproj -c Release -f:net6.0-windows10.0.19041.0 /p:GenerateAppxPackageOnBuild=true /p:AppxPackageSigningEnabled=true /p:PackageCertificateKeyFile="${{ github.workspace }}\cert.pfx" /p:PackageCertificatePassword="${{ secrets.WINDOWS_PFX_PASSWORD }}"
