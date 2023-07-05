@@ -11,14 +11,20 @@ public partial class MainPage : ContentPage
 
 	private void OnCounterClicked(object sender, EventArgs e)
 	{
-		count++;
+		var cnt = Counter();
 
-		if (count == 1)
-			CounterBtn.Text = $"Clicked {count} time";
+		if (cnt == 1)
+			CounterBtn.Text = $"Clicked {cnt} time";
 		else
-			CounterBtn.Text = $"Clicked {count} times";
+			CounterBtn.Text = $"Clicked {cnt} times";
 
 		SemanticScreenReader.Announce(CounterBtn.Text);
+	}
+
+
+	public int Counter(){
+		count++;
+		return count;
 	}
 }
 
